@@ -1,45 +1,28 @@
 # chat_azure
 有用户管理功能的Azure Open AI  API透明代理后台
 
-Azure Open AI API Transparent Proxy Backend
+# Azure Open AI API Transparent Proxy
 
-This project is a transparent proxy server for the Azure Open AI API, with user management functions added. It is based on two existing Github projects:
+This project is a transparent proxy for the Azure Open AI API, with user management functionality. It is based on the following repositories:
 
-• libli/chat
-• haibbo/cf-openai-azure-proxy
+- [libli/chat](https://github.com/libli/chat)
+- [haibbo/cf-openai-azure-proxy](https://github.com/haibbo/cf-openai-azure-proxy)
 
-This combination of technologies allows users to access the Azure Open AI API securely through the transparent proxy, while also enabling user management functions like authentication and authorization.
+## Features
 
-Features
+- User authentication and management
+- Transparent proxy for the Azure Open AI API
 
-• Transparent proxy server for the Azure Open AI API
-• User management functions for authentication and authorization
+## Getting Started
 
-Installation
+To get started with this project, follow these steps:
 
-To install and use this project, you will need to have the following:
+1. Clone this repository
+2. Install the required dependencies
+3. Configure the application
+4. Start the server
 
-• Azure account
-• Node.js and NPM installed
-• MongoDB installed
+## License
 
-Once you have these prerequisites, you can clone this repository, install dependencies, and start the server:
+This project is licensed under the [MIT License](https://opensource.org/licenses/MIT).
 
-git clone https://github.com/YOUR_USERNAME/YOUR_REPOSITORY.git
-cd YOUR_REPOSITORY
-npm install
-npm start
-
-Make sure to replace YOUR_USERNAME and YOUR_REPOSITORY with the appropriate values for your Github repository.
-
-Usage
-
-To use the transparent proxy server, simply send requests to the appropriate URL (e.g. http://localhost:3000/openai/classification) and include the appropriate API key and model ID. User management functions can be accessed through the appropriate URLs (e.g. http://localhost:3000/users/register).
-
-Contributing
-
-Please feel free to contribute to this project by submitting pull requests or issues on Github.
-
-License
-
-This project is licensed under the MIT License. See the LICENSE file for more details.
