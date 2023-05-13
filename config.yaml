@@ -1,0 +1,4 @@
+resourceName: "userResName"
+apiVersion: "2023-03-15-preview"
+mapper:
+  "gpt-3.5-turbo": "gptModelName"
