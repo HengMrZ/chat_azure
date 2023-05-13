@@ -1,17 +1,21 @@
 package api
 
 import (
-	"bytes"
 	"encoding/json"
 	"fmt"
 	"io"
 	"net/http"
 	"strings"
-	"time"
 
 	"github.com/HengMrZ/chat_azure/internal/config"
 	"github.com/HengMrZ/chat_azure/internal/pkg"
+	"github.com/pandodao/tokenizer-go"
+	"github.com/sirupsen/logrus"
 )
+
+func calculateTokens(input string) int {
+	return tokenizer.MustCalToken(input)
+}
 
 func HandleCompletions(w http.ResponseWriter, r *http.Request) {
 	if r.Method == http.MethodOptions {
@@ -39,6 +43,7 @@ func HandleCompletions(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 	}
+	logrus.Infof("req body:%v", body)
 	modelName := body["model"].(string)
 	deployName, ok := config.GlobalCfg.Mapper[modelName]
 	if !ok {
@@ -58,25 +63,28 @@ func HandleCompletions(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	bodyBts, _ := json.Marshal(body)
-	resp, bodyFromOpenAI, err := pkg.Post(fetchAPI, bodyBts, map[string]string{
+	resp, err := pkg.Post(fetchAPI, bodyBts, map[string]string{
 		"Content-Type": "application/json",
 		"api-key":      strings.TrimPrefix(authKey, "Bearer "),
 	})
+	if resp != nil {
+		defer resp.Body.Close()
+	}
 	if err != nil {
 		http.Error(w, "unknown error", http.StatusInternalServerError)
 		return
 	}
 
-	if strings.HasPrefix(modelName, "gpt-3") || body["stream"] != true {
+	if body["stream"] == false {
 		for k, v := range resp.Header {
 			w.Header().Set(k, strings.Join(v, ", "))
 		}
 		w.WriteHeader(resp.StatusCode)
-		io.Copy(w, bytes.NewBuffer(bodyFromOpenAI))
+		io.Copy(w, resp.Body)
 		return
 	}
-
-	rdr := io.TeeReader(resp.Body, w)
+	tokenCaculator := io.Discard // 统计token
+	rdr := io.TeeReader(resp.Body, tokenCaculator)
 	stream(rdr, w)
 }
 
@@ -93,7 +101,6 @@ func stream(readable io.Reader, w http.ResponseWriter) {
 		}
 		if n > 0 {
 			w.Write(buf[:n])
-			time.Sleep(50 * time.Millisecond)
 		}
 	}
 }
