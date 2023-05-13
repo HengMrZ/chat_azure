@@ -1,7 +1,6 @@
-# chat_azure
-有用户管理功能的Azure Open AI  API透明代理后台
+# chat_azure --- Aure Open AI API Transparent Proxy
 
-# Azure Open AI API Transparent Proxy
+有用户管理功能的Azure Open AI  API透明代理后台
 
 This project is a transparent proxy for the Azure Open AI API, with user management functionality. It is based on the following repositories:
 
