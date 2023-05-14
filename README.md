@@ -16,7 +16,7 @@ This project is a transparent proxy for the Azure Open AI API, with user managem
 - [x] 基于 azure API proxy
 - [x] SSE
 - [ ] 用户管理
-- [ ] 基于 token 计数
+- [x] 基于 token 计数
 - [ ] Docker
 - [ ] 完善 README
 
