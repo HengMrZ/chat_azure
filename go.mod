@@ -3,6 +3,7 @@ module github.com/HengMrZ/chat_azure
 go 1.18
 
 require (
+	github.com/mattn/go-sqlite3 v1.14.16
 	github.com/pandodao/tokenizer-go v0.2.0
 	github.com/sirupsen/logrus v1.9.0
 	gopkg.in/yaml.v2 v2.4.0

@@ -1,6 +1,7 @@
 package api
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -9,13 +10,8 @@ import (
 
 	"github.com/HengMrZ/chat_azure/internal/config"
 	"github.com/HengMrZ/chat_azure/internal/pkg"
-	"github.com/pandodao/tokenizer-go"
 	"github.com/sirupsen/logrus"
 )
-
-func calculateTokens(input string) int {
-	return tokenizer.MustCalToken(input)
-}
 
 func HandleCompletions(w http.ResponseWriter, r *http.Request) {
 	if r.Method == http.MethodOptions {
@@ -75,6 +71,8 @@ func HandleCompletions(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	reqTokens := calcuReqTokens(body)
+	logrus.Infof("reqToken:%v", reqTokens)
 	if body["stream"] == false {
 		for k, v := range resp.Header {
 			w.Header().Set(k, strings.Join(v, ", "))
@@ -83,9 +81,12 @@ func HandleCompletions(w http.ResponseWriter, r *http.Request) {
 		io.Copy(w, resp.Body)
 		return
 	}
-	tokenCaculator := io.Discard // 统计token
-	rdr := io.TeeReader(resp.Body, tokenCaculator)
+
+	var buf bytes.Buffer
+	rdr := io.TeeReader(resp.Body, &buf)
 	stream(rdr, w)
+	rspTokens := calcuRspTokens(&buf)
+	logrus.Infof("rspTokens:%v", rspTokens)
 }
 
 func stream(readable io.Reader, w http.ResponseWriter) {
