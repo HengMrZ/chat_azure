@@ -12,6 +12,14 @@ This project is a transparent proxy for the Azure Open AI API, with user managem
 - User authentication and management
 - Transparent proxy for the Azure Open AI API
 
+## Roudmap
+- [x] 基于 azure API proxy
+- [x] SSE
+- [ ] 用户管理
+- [ ] 基于 token 计数
+- [ ] Docker
+- [ ] 完善 README
+
 ## Getting Started
 
 To get started with this project, follow these steps:
