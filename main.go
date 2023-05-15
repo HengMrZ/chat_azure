@@ -14,9 +14,25 @@ import (
 )
 
 func InitAdminUser() error {
-	rndToken := pkg.RndStr()
 	_, err := models.QueryUserByName(models.GlobalDB, "root")
-	if err != nil && err.Error() == "user not found" {
+	if err != nil {
+		sqlStmt := `
+		CREATE TABLE "users" (
+			"id" integer,
+			"username" text NOT NULL UNIQUE,
+			"token" text NOT NULL UNIQUE,
+			"count" integer NOT NULL DEFAULT 0,
+			"status" integer NOT NULL DEFAULT 1,
+			"create_time" datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+			"update_time" datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+			PRIMARY KEY ("id")
+		);
+	`
+		if _, err := models.GlobalDB.Exec(sqlStmt); err != nil {
+			panic(err)
+		}
+
+		rndToken := pkg.RndStr()
 		err := models.AddUser(models.GlobalDB, "root", rndToken, 2)
 		if err != nil {
 			return err
