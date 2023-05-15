@@ -52,6 +52,7 @@ type Chunk struct {
 func calcuRspTokens(buf *bytes.Buffer) int {
 	bts, _ := io.ReadAll(buf)
 
+	// logrus.Infof("rsp:%s", bts)
 	var contents string
 	for _, line := range strings.Split(string(bts), "\n") {
 		line = strings.Trim(line, " \t\n")

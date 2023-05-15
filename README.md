@@ -15,8 +15,8 @@ This project is a transparent proxy for the Azure Open AI API, with user managem
 ## Roudmap
 - [x] 基于 azure API proxy
 - [x] SSE
-- [ ] 用户管理
-- [ ] 基于 token 计数
+- [x] 用户管理
+- [x] 基于 token 计数
 - [ ] Docker
 - [ ] 完善 README
 
@@ -28,6 +28,34 @@ To get started with this project, follow these steps:
 2. Install the required dependencies
 3. Configure the application
 4. Start the server
+
+## Management API
+
+This project also provides two management APIs.
+
+1. Adding a new user:
+
+    Request:
+    ```
+    curl -d '{"admin_token":"093E5AqE","username":"pig","token":"90092700"}' http://127.0.0.1:3389/v1/adduser
+    ```
+
+    Response:
+    ```
+        {"status":"ok"}
+    ```
+2. Querying user information:
+
+    Request:
+    ```
+    curl -d '{"token":"093E5AqE"}' http://127.0.0.1:3389/v1/queryuser
+    ```
+    Response:
+    ```
+    {"count":239,"status":2,"username":"root"}
+    ```
+
+    Among them, "count" represents the number of tokens consumed in this program, which is used to calculate the usage.
 
 ## License
 

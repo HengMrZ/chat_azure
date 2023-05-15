@@ -9,6 +9,7 @@ import (
 	"strings"
 
 	"github.com/HengMrZ/chat_azure/internal/config"
+	"github.com/HengMrZ/chat_azure/internal/models"
 	"github.com/HengMrZ/chat_azure/internal/pkg"
 	"github.com/sirupsen/logrus"
 )
@@ -39,7 +40,13 @@ func HandleCompletions(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 	}
-	logrus.Infof("req body:%v", body)
+
+	token, willReturn := checkUserToken(r, w)
+	if willReturn {
+		return
+	}
+
+	// logrus.Infof("req token:%v", token)
 	modelName := body["model"].(string)
 	deployName, ok := config.GlobalCfg.Mapper[modelName]
 	if !ok {
@@ -72,7 +79,7 @@ func HandleCompletions(w http.ResponseWriter, r *http.Request) {
 	}
 
 	reqTokens := calcuReqTokens(body)
-	logrus.Infof("reqToken:%v", reqTokens)
+	// logrus.Infof("reqToken:%v", reqTokens)
 	if body["stream"] == false {
 		for k, v := range resp.Header {
 			w.Header().Set(k, strings.Join(v, ", "))
@@ -85,8 +92,37 @@ func HandleCompletions(w http.ResponseWriter, r *http.Request) {
 	var buf bytes.Buffer
 	rdr := io.TeeReader(resp.Body, &buf)
 	stream(rdr, w)
+
 	rspTokens := calcuRspTokens(&buf)
-	logrus.Infof("rspTokens:%v", rspTokens)
+	// logrus.Infof("rspTokens:%v", rspTokens)
+	for i := 0; i < 3; i++ {
+		err = models.AddCount(models.GlobalDB, token, reqTokens+rspTokens)
+		if err != nil {
+			logrus.Error(err)
+			continue
+		} else {
+			return
+		}
+	}
+}
+
+func checkUserToken(r *http.Request, w http.ResponseWriter) (string, bool) {
+	queryParams := r.URL.Query()
+	token := queryParams.Get("token")
+	if token == "" {
+		http.Error(w, "token not found in URL", http.StatusForbidden)
+		return "", true
+	}
+	user, err := models.QueryUserByToken(models.GlobalDB, token)
+	if err != nil {
+		http.Error(w, "user does not exist", http.StatusForbidden)
+		return "", true
+	}
+	if user.Status == 0 {
+		http.Error(w, "user is not valid", http.StatusForbidden)
+		return "", true
+	}
+	return token, false
 }
 
 func stream(readable io.Reader, w http.ResponseWriter) {
