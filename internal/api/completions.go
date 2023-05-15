@@ -46,17 +46,20 @@ func HandleCompletions(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// logrus.Infof("req token:%v", token)
-	modelName := body["model"].(string)
+	modelName, ok := body["model"].(string)
+	if !ok {
+		http.Error(w, "The model field is missing in the request body", http.StatusInternalServerError)
+		return
+	}
 	deployName, ok := config.GlobalCfg.Mapper[modelName]
 	if !ok {
 		deployName = "firstGPT"
 	}
-
 	if deployName == "" {
 		http.Error(w, "Missing model mapper", http.StatusForbidden)
 		return
 	}
+
 	fetchAPI := fmt.Sprintf("https://%s.openai.azure.com/openai/deployments/%s/%s?api-version=%s",
 		config.GlobalCfg.ResourceName, deployName, path, config.GlobalCfg.ApiVersion)
 
@@ -74,8 +77,8 @@ func HandleCompletions(w http.ResponseWriter, r *http.Request) {
 	}
 
 	reqTokens := calcuReqTokens(body)
-	// logrus.Infof("reqToken:%v", reqTokens)
 	if body["stream"] == false {
+		// TODO: 当stream模式为false，未统计tokens
 		for k, v := range resp.Header {
 			w.Header().Set(k, strings.Join(v, ", "))
 		}
@@ -88,10 +91,14 @@ func HandleCompletions(w http.ResponseWriter, r *http.Request) {
 	rdr := io.TeeReader(resp.Body, &buf)
 	stream(rdr, w)
 
-	rspTokens := calcuRspTokens(&buf)
-	// logrus.Infof("rspTokens:%v", rspTokens)
+	rspTokens := calcuStreamRspTokens(&buf)
+	modUserCount(token, reqTokens, rspTokens)
+}
+
+func modUserCount(token string, reqTokens int, rspTokens int) {
+	// 重试3次
 	for i := 0; i < 3; i++ {
-		err = models.AddCount(models.GlobalDB, token, reqTokens+rspTokens)
+		err := models.AddCount(models.GlobalDB, token, reqTokens+rspTokens)
 		if err != nil {
 			logrus.Error(err)
 			continue

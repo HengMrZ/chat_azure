@@ -49,10 +49,10 @@ type Chunk struct {
 	Usage   string   `json:"usage"`
 }
 
-func calcuRspTokens(buf *bytes.Buffer) int {
+func calcuStreamRspTokens(buf *bytes.Buffer) int {
+	// TODO: 这里全部读取了返回流，可能会占用较大内存，可以按\n切分流，逐步计算，直到最后的[DONE]
 	bts, _ := io.ReadAll(buf)
 
-	// logrus.Infof("rsp:%s", bts)
 	var contents string
 	for _, line := range strings.Split(string(bts), "\n") {
 		line = strings.Trim(line, " \t\n")

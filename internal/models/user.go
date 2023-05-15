@@ -16,7 +16,7 @@ type User struct {
 	ID         int
 	Username   string `sql:"not null;unique"`
 	Token      string `sql:"not null;unique"`
-	Count      int    `sql:"not null;default:0"`
+	Count      int    `sql:"not null;default:0"` // openai tokens 用于计费
 	Status     int    `sql:"not null;default:1"` // 0 禁用, 1 普通, 2 管理员
 	CreateTime time.Time
 	UpdateTime time.Time
