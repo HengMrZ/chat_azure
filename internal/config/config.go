@@ -4,6 +4,7 @@ import (
 	"io/ioutil"
 
 	"github.com/sirupsen/logrus"
+	"github.com/ysmood/gop"
 	"gopkg.in/yaml.v2"
 )
 
@@ -26,6 +27,7 @@ func LoadConfig(filename string) error {
 	if err != nil {
 		logrus.Fatalf("Error unmarshaling config file: %v", err)
 	}
-	logrus.Infof("cfg:%v", *GlobalCfg)
+	// logrus.Infof("cfg:%v", *GlobalCfg)
+	gop.P(*GlobalCfg)
 	return nil
 }
