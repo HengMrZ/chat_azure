@@ -31,6 +31,42 @@ To get started with this project, follow these steps:
 4. Start the server
 
 ## Docker
+### 安装 Docker
+
+以下是安装 Docker 的命令行：
+
+```bash
+curl -fsSL https://get.docker.com -o get-docker.sh
+sh get-docker.sh
+```
+
+### 腾讯云轻量云主机 OpenCloudOS (未安装 Docker) 的安装方法
+
+1. 添加 Docker CE 软件源
+
+```bash
+dnf config-manager --add-repo=http://mirrors.tencent.com/docker-ce/linux/centos/docker-ce.repo
+```
+
+2. 列出可用的 Docker CE 版本
+
+```bash
+dnf list docker-ce
+```
+
+3. 安装最适合的 Docker CE 版本
+
+```bash
+dnf install -y docker-ce --nobest
+```
+
+4. 启动 Docker 服务
+
+```bash
+systemctl start docker
+```
+
+执行以上步骤后，您已经安装并启动了 Docker。现在，您可以通过 Git 进行版本控制来存储和管理代码。
 
 ### Build
 
