@@ -7,7 +7,7 @@ import (
 	"fmt"
 	"time"
 
-	_ "github.com/mattn/go-sqlite3"
+	_ "github.com/glebarez/go-sqlite"
 )
 
 var GlobalDB *sql.DB
@@ -24,7 +24,7 @@ type User struct {
 
 func InitDB(ctx context.Context) {
 	var err error
-	GlobalDB, err = sql.Open("sqlite3", "./chat.db")
+	GlobalDB, err = sql.Open("sqlite", "./chat.db")
 	if err != nil {
 		panic(err)
 	}

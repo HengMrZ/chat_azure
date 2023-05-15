@@ -4,6 +4,8 @@ import (
 	"context"
 	"fmt"
 	"net/http"
+	"os"
+	"strconv"
 	"time"
 
 	"github.com/HengMrZ/chat_azure/internal/api"
@@ -32,12 +34,20 @@ func InitAdminUser() error {
 			panic(err)
 		}
 
-		rndToken := pkg.RndStr()
-		err := models.AddUser(models.GlobalDB, "root", rndToken, 2)
+		initAdminUser := "root"
+		if v, exist := os.LookupEnv("INIT_ADMIN_USER"); exist {
+			initAdminUser = v
+		}
+
+		initAdminToken := pkg.RndStr(16)
+		if v, exist := os.LookupEnv("INIT_ADMIN_TOKEN"); exist {
+			initAdminToken = v
+		}
+		err := models.AddUser(models.GlobalDB, initAdminUser, initAdminToken, 2)
 		if err != nil {
 			return err
 		}
-		logrus.Infof("init rootuser, username: root, token:%v", rndToken)
+		logrus.Infof("init rootuser, user[%v], token[%v]", initAdminUser, initAdminToken)
 	}
 	return nil
 }
@@ -64,8 +74,11 @@ func main() {
 	mux.HandleFunc("/v1/adduser", api.AddUser)
 	mux.HandleFunc("/v1/queryuser", api.QueryUser)
 
-	port := 3389
-	logrus.Infof("svc run on port:%v", port)
+	port := 8080
+	if v, exist := os.LookupEnv("LISTEN_PORT"); exist {
+		port, _ = strconv.Atoi(v)
+	}
+	logrus.Infof("svc run on port [:%v]", port)
 	err = http.ListenAndServe(fmt.Sprintf(":%v", port), loggingMiddleware(mux))
 	if err != nil {
 		logrus.Fatal(err)
