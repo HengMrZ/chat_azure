@@ -35,6 +35,8 @@ This project also provides two management APIs.
 
 1. Adding a new user:
 
+    When the program is executed for the first time, it will create the `users` table and generate the `root` user along with their `token` (as `admin_token`), It will be printed in the system output.
+
     Request:
     ```
     curl -d '{"admin_token":"093E5AqE","username":"pig","token":"90092700"}' http://127.0.0.1:3389/v1/adduser

@@ -60,15 +60,10 @@ func HandleCompletions(w http.ResponseWriter, r *http.Request) {
 	fetchAPI := fmt.Sprintf("https://%s.openai.azure.com/openai/deployments/%s/%s?api-version=%s",
 		config.GlobalCfg.ResourceName, deployName, path, config.GlobalCfg.ApiVersion)
 
-	authKey := r.Header.Get("Authorization")
-	if authKey == "" {
-		http.Error(w, "Not allowed", http.StatusForbidden)
-		return
-	}
 	bodyBts, _ := json.Marshal(body)
 	resp, err := pkg.Post(fetchAPI, bodyBts, map[string]string{
 		"Content-Type": "application/json",
-		"api-key":      strings.TrimPrefix(authKey, "Bearer "),
+		"api-key":      strings.TrimPrefix(config.GlobalCfg.ApiKey, "Bearer "),
 	})
 	if resp != nil {
 		defer resp.Body.Close()
@@ -107,8 +102,8 @@ func HandleCompletions(w http.ResponseWriter, r *http.Request) {
 }
 
 func checkUserToken(r *http.Request, w http.ResponseWriter) (string, bool) {
-	queryParams := r.URL.Query()
-	token := queryParams.Get("token")
+	token := r.Header.Get("Authorization")
+	token = strings.TrimPrefix(token, "Bearer ")
 	if token == "" {
 		http.Error(w, "token not found in URL", http.StatusForbidden)
 		return "", true

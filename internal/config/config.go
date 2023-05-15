@@ -12,6 +12,7 @@ var GlobalCfg = new(AppConfig)
 type AppConfig struct {
 	ResourceName string            `yaml:"resourceName"`
 	ApiVersion   string            `yaml:"apiVersion"`
+	ApiKey       string            `yaml:"apiKey"`
 	Mapper       map[string]string `yaml:"mapper"`
 }
 
