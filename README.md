@@ -68,15 +68,6 @@ systemctl start docker
 
 执行以上步骤后，您已经安装并启动了 Docker。现在，您可以通过 Git 进行版本控制来存储和管理代码。
 
-### Build
-
-```shell
-docker build -t chat_azure .
-
-# optional: multi-arch
-docker buildx build --platform 'linux/amd64' -t chat_azure:amd64 .
-docker buildx build --platform 'linux/arm64' -t chat_azure:arm64 .
-```
 
 ### Deploy (with env)
 
@@ -86,7 +77,7 @@ docker run -d --name chat_azure \
     -e "APIKEY=[AZURE's api key]" \
     -e "MAPPER_GPT35TUBER=[AZURE's OpenAI deploy]" \
     -p 8080:8080 \
-    chat_azure
+    hermanz/chat_azure
 ```
 
 ### Deploy (with config)
@@ -95,7 +86,7 @@ docker run -d --name chat_azure \
 docker run -d --name chat_azure \
     -v config.yaml:/opt/config.yaml:ro \
     -p 8080:8080 \
-    chat_azure
+    hermanz/chat_azure
 ```
 
 ## Management API
