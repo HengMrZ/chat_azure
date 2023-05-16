@@ -1,18 +1,16 @@
 # chat_azure --- Aure Open AI API Transparent Proxy
 
-有用户管理功能的 Azure Open AI API 透明代理后台
-
-This project is a transparent proxy for the Azure Open AI API, with user management functionality. It is based on the following repositories:
+这是一个带有用户管理功能的 Azure Open AI API 透明代理后台。此项目基于以下库：
 
 - [libli/chat](https://github.com/libli/chat)
 - [haibbo/cf-openai-azure-proxy](https://github.com/haibbo/cf-openai-azure-proxy)
 
-## Features
+## 特性
 
-- User authentication and management
-- Transparent proxy for the Azure Open AI API
+- 用户身份验证和管理
+- Azure Open AI API 的透明代理
 
-## Roudmap
+## 路线图
 
 - [x] 基于 azure API proxy
 - [x] SSE
@@ -21,14 +19,13 @@ This project is a transparent proxy for the Azure Open AI API, with user managem
 - [x] Docker
 - [ ] 完善 README
 
-## Getting Started
+## 入门指南
 
-To get started with this project, follow these steps:
+要开始使用此项目，请按照以下步骤操作：
 
-1. Clone this repository
-2. Install the required dependencies
-3. Configure the application
-4. Start the server
+1. 安装docker
+2. 新建文件夹，创建配置文件
+3. 选择合适方式启动
 
 ## Docker
 ### 安装 Docker
@@ -66,10 +63,9 @@ dnf install -y docker-ce --nobest
 systemctl start docker
 ```
 
-执行以上步骤后，您已经安装并启动了 Docker。现在，您可以通过 Git 进行版本控制来存储和管理代码。
+执行以上步骤后，您已经安装并启动了 Docker。现在，您可以通过以下方式启动服务。
 
-
-### Deploy (with env)
+### 部署（使用 env）
 
 ```shell
 docker run -d --name chat_azure \
@@ -80,7 +76,7 @@ docker run -d --name chat_azure \
     hermanz/chat_azure:latest
 ```
 
-### Deploy (with config)
+### 部署（使用配置）
 
 ```shell
 docker run -d --name chat_azure \
@@ -89,42 +85,42 @@ docker run -d --name chat_azure \
     hermanz/chat_azure:latest
 ```
 
-## Management API
+## 管理 API
 
-This project also provides two management APIs.
+此项目还提供两个管理 API。
 
-1. Adding a new user:
+1. 添加新用户：
 
-   When the program is executed for the first time, it will create the `users` table and generate the `root` user along with their `token` (as `admin_token`), It will be printed in the system output.
+   当程序第一次执行时，它将创建“users”表并生成“root”用户以及其“token”（作为“admin_token”），它将打印在系统输出中，可以通过docker logs -f  chat_azure来查看root key。
 
-   Request:
+   请求：
 
    ```
    curl -d '{"admin_token":"093E5AqE","username":"pig","token":"90092700"}' http://127.0.0.1:8080/v1/adduser
    ```
 
-   Response:
+   响应：
 
    ```
        {"status":"ok"}
    ```
 
-2. Querying user information:
+2. 查询用户信息：
 
-   Request:
+   请求：
 
    ```
    curl -d '{"token":"093E5AqE"}' http://127.0.0.1:8080/v1/queryuser
    ```
 
-   Response:
+   响应：
 
    ```
    {"count":239,"status":2,"username":"root"}
    ```
 
-   Among them, "count" represents the number of tokens consumed in this program, which is used to calculate the usage.
+   其中，“count”表示在此程序中使用的消耗的令牌数量，用于计算使用情况。
 
-## License
+## 许可证
 
-This project is licensed under the [MIT License](https://opensource.org/licenses/MIT).
+该项目基于 [MIT 许可证](https://opensource.org/licenses/MIT) 授权。
