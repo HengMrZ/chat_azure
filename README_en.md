@@ -23,10 +23,10 @@ This project is a transparent proxy for the Azure Open AI API, with user managem
 
 To get started with this project, follow these steps:
 
-1. Clone this repository
-2. Install the required dependencies
-3. Configure the application
-4. Start the server
+1. Install Docker
+2. Create a new folder and create a configuration file
+3. Choose an appropriate way to start the project.
+
 
 ## Docker
 ### Install Docker
