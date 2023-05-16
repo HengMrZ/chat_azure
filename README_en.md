@@ -1,4 +1,6 @@
 # chat_azure --- Aure Open AI API Transparent Proxy
+[中文 README](./README.md)
+
 
 This project is a transparent proxy for the Azure Open AI API, with user management functionality. It is based on the following repositories:
 
