@@ -1,4 +1,5 @@
 # chat_azure --- Aure Open AI API Transparent Proxy
+[English README](./README_en.md)
 
 这是一个带有用户管理功能的 Azure Open AI API 透明代理后台。此项目基于以下库：
 
