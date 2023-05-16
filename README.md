@@ -77,7 +77,7 @@ docker run -d --name chat_azure \
     -e "APIKEY=[AZURE's api key]" \
     -e "MAPPER_GPT35TUBER=[AZURE's OpenAI deploy]" \
     -p 8080:8080 \
-    hermanz/chat_azure
+    hermanz/chat_azure:latest
 ```
 
 ### Deploy (with config)
@@ -86,7 +86,7 @@ docker run -d --name chat_azure \
 docker run -d --name chat_azure \
     -v config.yaml:/opt/config.yaml:ro \
     -p 8080:8080 \
-    hermanz/chat_azure
+    hermanz/chat_azure:latest
 ```
 
 ## Management API
