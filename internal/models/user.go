@@ -5,9 +5,12 @@ import (
 	"database/sql"
 	"errors"
 	"fmt"
+	"os"
+	"path/filepath"
 	"time"
 
 	_ "github.com/glebarez/go-sqlite"
+	"github.com/sirupsen/logrus"
 )
 
 var GlobalDB *sql.DB
@@ -24,7 +27,15 @@ type User struct {
 
 func InitDB(ctx context.Context) {
 	var err error
-	GlobalDB, err = sql.Open("sqlite", "./chat.db")
+	dbPath := "chat.db"
+	if v, exist := os.LookupEnv("DB_ROOT"); exist {
+		dbPath = filepath.Join(v, dbPath)
+	} else {
+		cwd, _ := os.Getwd()
+		dbPath = filepath.Join(cwd, dbPath)
+	}
+	logrus.Infof("# DB@sqlite: [%s]", dbPath)
+	GlobalDB, err = sql.Open("sqlite", dbPath)
 	if err != nil {
 		panic(err)
 	}

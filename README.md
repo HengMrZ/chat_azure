@@ -69,10 +69,17 @@ systemctl start docker
 
 执行以上步骤后，您已经安装并启动了 Docker。现在，您可以通过以下方式启动服务。
 
+### 部署-数据库持久存储
+
+```shell
+docker volume create chat_azure.db
+```
+
 ### 部署（使用 env）
 
 ```shell
 docker run -d --name chat_azure \
+    -v  chat_azure.db:/data:rw \
     -e "RESOURCENAME=[AZURE's resource name]" \
     -e "APIKEY=[AZURE's api key]" \
     -e "MAPPER_GPT35TUBER=[AZURE's OpenAI deploy]" \
@@ -84,6 +91,7 @@ docker run -d --name chat_azure \
 
 ```shell
 docker run -d --name chat_azure \
+    -v  chat_azure.db:/data:rw \
     -v config.yaml:/opt/config.yaml:ro \
     -p 8080:8080 \
     hermanz/chat_azure:latest
