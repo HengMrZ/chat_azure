@@ -12,6 +12,15 @@ RUN go build -x .
 # finally
 FROM --platform=$TARGETPLATFORM debian:stable-slim
 
+ARG MIRRORS=mirrors.tencent.com
+
+RUN set -ex && cd / \
+    && sed "s+//.*debian.org+//${MIRRORS}+g; /^#/d" -i /etc/apt/sources.list \
+    && apt --allow-releaseinfo-change -y update \
+    && apt install -y --no-install-recommends ca-certificates \
+    && update-ca-certificates \
+    && rm -rf /var/cache/apt/* /root/.cache
+
 COPY --from=builder /app/chat_azure /usr/local/bin
 COPY --from=builder /app/entrypoint.sh /usr/local/bin
 

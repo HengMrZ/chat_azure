@@ -52,6 +52,27 @@ func InitAdminUser() error {
 	return nil
 }
 
+func InitUsers() error {
+	for _, it := range config.GlobalCfg.InitUsers {
+		if user, err := models.QueryUserByName(models.GlobalDB, it.Username); err == nil {
+			if user.Token != it.Token {
+				if err = models.UpdateTokenByName(models.GlobalDB, it.Username, it.Token); err != nil {
+					return err
+				}
+				logrus.Infof("User[%s]'s Token[%s] Updated!", it.Username, it.Token)
+			} else {
+				logrus.Infof("User[%s]'s Token[%s] Checked OK!", it.Username, it.Token)
+			}
+		} else {
+			if err = models.AddUser(models.GlobalDB, it.Username, it.Token, 1); err != nil {
+				return err
+			}
+			logrus.Infof("User[%s] with Token[%s] Created!", it.Username, it.Token)
+		}
+	}
+	return nil
+}
+
 func main() {
 	err := config.LoadConfig("./config.yaml")
 	if err != nil {
@@ -63,6 +84,11 @@ func main() {
 	models.InitDB(ctx)
 
 	err = InitAdminUser()
+	if err != nil {
+		logrus.Fatal(err)
+	}
+
+	err = InitUsers()
 	if err != nil {
 		logrus.Fatal(err)
 	}

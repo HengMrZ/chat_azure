@@ -1,6 +1,6 @@
 # chat_azure --- Aure Open AI API Transparent Proxy
-[中文 README](./README.md)
 
+[中文 README](./README.md)
 
 This project is a transparent proxy for the Azure Open AI API, with user management functionality. It is based on the following repositories:
 
@@ -17,6 +17,7 @@ This project is a transparent proxy for the Azure Open AI API, with user managem
 - [x] Based on azure API proxy
 - [x] SSE
 - [x] User management
+  - [x] InitUsers management
 - [x] Based on token counting
 - [x] Docker
 - [ ] Improve README
@@ -29,8 +30,8 @@ To get started with this project, follow these steps:
 2. Create a new folder and create a configuration file
 3. Choose an appropriate way to start the project.
 
-
 ## Docker
+
 ### Install Docker
 
 The following is the command line to install Docker:

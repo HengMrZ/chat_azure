@@ -1,4 +1,5 @@
 # chat_azure --- Aure Open AI API Transparent Proxy
+
 [English README](./README_en.md)
 
 这是一个带有用户管理功能的 Azure Open AI API 透明代理后台。此项目基于以下库：
@@ -16,6 +17,7 @@
 - [x] 基于 azure API proxy
 - [x] SSE
 - [x] 用户管理
+  - [x] 初始化用户管理
 - [x] 基于 token 计数
 - [x] Docker
 - [ ] 完善 README
@@ -24,11 +26,12 @@
 
 要开始使用此项目，请按照以下步骤操作：
 
-1. 安装docker
+1. 安装 docker
 2. 新建文件夹，创建配置文件
 3. 选择合适方式启动
 
 ## Docker
+
 ### 安装 Docker
 
 以下是安装 Docker 的命令行：
@@ -92,7 +95,7 @@ docker run -d --name chat_azure \
 
 1. 添加新用户：
 
-   当程序第一次执行时，它将创建“users”表并生成“root”用户以及其“token”（作为“admin_token”），它将打印在系统输出中，可以通过docker logs -f  chat_azure来查看root key。
+   当程序第一次执行时，它将创建“users”表并生成“root”用户以及其“token”（作为“admin_token”），它将打印在系统输出中，可以通过 docker logs -f chat_azure 来查看 root key。
 
    请求：
 

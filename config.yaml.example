@@ -3,3 +3,4 @@ apiVersion: "2023-03-15-preview"
 apiKey: "an api key"
 mapper:
   "gpt-3.5-turbo": "gptModelName"
+initUsers: []

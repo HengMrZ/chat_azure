@@ -14,10 +14,10 @@ var GlobalDB *sql.DB
 
 type User struct {
 	ID         int
-	Username   string `sql:"not null;unique"`
-	Token      string `sql:"not null;unique"`
-	Count      int    `sql:"not null;default:0"` // openai tokens 用于计费
-	Status     int    `sql:"not null;default:1"` // 0 禁用, 1 普通, 2 管理员
+	Username   string `sql:"not null;unique" yaml:"Username"`
+	Token      string `sql:"not null;unique" yaml:"Token"`
+	Count      int    `sql:"not null;default:0" ` // openai tokens 用于计费
+	Status     int    `sql:"not null;default:1"`  // 0 禁用, 1 普通, 2 管理员
 	CreateTime time.Time
 	UpdateTime time.Time
 }
@@ -144,4 +144,47 @@ func QueryUserByName(db *sql.DB, username string) (*User, error) {
 	}
 
 	return &user, nil
+}
+
+func UpdateTokenByName(db *sql.DB, username, token string) error {
+	// 查找用户记录
+	row := db.QueryRow(`
+		SELECT id
+		FROM users
+		WHERE username = ?
+	`, username)
+
+	var id int
+	if err := row.Scan(&id); err != nil {
+		if err == sql.ErrNoRows {
+			return errors.New("user not found")
+		}
+		return err
+	}
+
+	// 更新用户记录
+	stmt, err := db.Prepare(`
+		UPDATE users
+		SET token = ?
+		WHERE id = ?
+	`)
+	if err != nil {
+		return err
+	}
+	defer stmt.Close()
+
+	res, err := stmt.Exec(token, id)
+	if err != nil {
+		return err
+	}
+
+	rowsAffected, err := res.RowsAffected()
+	if err != nil {
+		return err
+	}
+	if rowsAffected == 0 {
+		return errors.New("concurrent update detected")
+	}
+
+	return nil
 }
