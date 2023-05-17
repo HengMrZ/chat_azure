@@ -12,7 +12,7 @@ RUN go build -x .
 # finally
 FROM --platform=$TARGETPLATFORM debian:stable-slim
 
-ARG MIRRORS=mirrors.tencent.com
+ARG MIRRORS=mirrors.aliyun.com
 
 RUN set -ex && cd / \
     && sed "s+//.*debian.org+//${MIRRORS}+g; /^#/d" -i /etc/apt/sources.list \
