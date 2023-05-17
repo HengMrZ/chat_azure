@@ -3,6 +3,7 @@ package config
 import (
 	"io/ioutil"
 
+	"github.com/HengMrZ/chat_azure/internal/models"
 	"github.com/sirupsen/logrus"
 	"github.com/ysmood/gop"
 	"gopkg.in/yaml.v2"
@@ -15,6 +16,7 @@ type AppConfig struct {
 	ApiVersion   string            `yaml:"apiVersion"`
 	ApiKey       string            `yaml:"apiKey"`
 	Mapper       map[string]string `yaml:"mapper"`
+	InitUsers    []models.User     `yaml:"initUsers"`
 }
 
 func LoadConfig(filename string) error {
