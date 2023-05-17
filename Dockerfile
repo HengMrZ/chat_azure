@@ -26,7 +26,8 @@ COPY --from=builder /app/entrypoint.sh /usr/local/bin
 
 WORKDIR /app
 
-ENV RESOURCENAME='' \
+ENV DB_ROOT=/data \
+    RESOURCENAME='' \
     APIKEY='' \
     MAPPER_GPT35TUBER=''
 
