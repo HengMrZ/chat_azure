@@ -73,6 +73,7 @@ func main() {
 	mux.HandleFunc("/v1/models", api.HandleModels)
 	mux.HandleFunc("/v1/adduser", api.AddUser)
 	mux.HandleFunc("/v1/queryuser", api.QueryUser)
+	mux.HandleFunc("/", api.HandleOptions)
 
 	port := 8080
 	if v, exist := os.LookupEnv("LISTEN_PORT"); exist {

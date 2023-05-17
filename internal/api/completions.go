@@ -16,7 +16,10 @@ import (
 
 func HandleCompletions(w http.ResponseWriter, r *http.Request) {
 	if r.Method == http.MethodOptions {
-		handleOptions(w, r)
+		w.Header().Set("Access-Control-Allow-Origin", "*")
+		w.Header().Set("Access-Control-Allow-Methods", "*")
+		w.Header().Set("Access-Control-Allow-Headers", "*")
+		w.WriteHeader(http.StatusOK)
 		return
 	}
 
