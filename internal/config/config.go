@@ -27,7 +27,7 @@ func LoadConfig(filename string) error {
 	if err != nil {
 		logrus.Fatalf("Error unmarshaling config file: %v", err)
 	}
-	// logrus.Infof("cfg:%v", *GlobalCfg)
 	gop.P(*GlobalCfg)
+	logrus.Infof("cfg:%v", *GlobalCfg)
 	return nil
 }

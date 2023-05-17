@@ -31,6 +31,7 @@ func HandleCompletions(w http.ResponseWriter, r *http.Request) {
 		path = "completions"
 	default:
 		http.Error(w, "404 not found", http.StatusNotFound)
+		logrus.Error("404 not found")
 		return
 	}
 
@@ -40,6 +41,7 @@ func HandleCompletions(w http.ResponseWriter, r *http.Request) {
 		err := json.NewDecoder(r.Body).Decode(&body)
 		if err != nil && err != io.EOF {
 			http.Error(w, err.Error(), http.StatusBadRequest)
+			logrus.Error("http decode error " + err.Error())
 			return
 		}
 	}
@@ -52,6 +54,7 @@ func HandleCompletions(w http.ResponseWriter, r *http.Request) {
 	modelName, ok := body["model"].(string)
 	if !ok {
 		http.Error(w, "The model field is missing in the request body", http.StatusInternalServerError)
+		logrus.Error("The model field is missing in the request body")
 		return
 	}
 	deployName, ok := config.GlobalCfg.Mapper[modelName]
@@ -60,6 +63,7 @@ func HandleCompletions(w http.ResponseWriter, r *http.Request) {
 	}
 	if deployName == "" {
 		http.Error(w, "Missing model mapper", http.StatusForbidden)
+		logrus.Error("Missing model mapper")
 		return
 	}
 
@@ -75,7 +79,8 @@ func HandleCompletions(w http.ResponseWriter, r *http.Request) {
 		defer resp.Body.Close()
 	}
 	if err != nil {
-		http.Error(w, "unknown error", http.StatusInternalServerError)
+		http.Error(w, "unknown error"+err.Error(), http.StatusInternalServerError)
+		logrus.Error("unknown error" + err.Error())
 		return
 	}
 
@@ -116,15 +121,18 @@ func checkUserToken(r *http.Request, w http.ResponseWriter) (string, bool) {
 	token = strings.TrimPrefix(token, "Bearer ")
 	if token == "" {
 		http.Error(w, "token not found in URL", http.StatusForbidden)
+		logrus.Error("token not found in URL")
 		return "", true
 	}
 	user, err := models.QueryUserByToken(models.GlobalDB, token)
 	if err != nil {
 		http.Error(w, "user does not exist", http.StatusForbidden)
+		logrus.Error("user does not exist")
 		return "", true
 	}
 	if user.Status == 0 {
 		http.Error(w, "user is not valid", http.StatusForbidden)
+		logrus.Error("user is not valid")
 		return "", true
 	}
 	return token, false
