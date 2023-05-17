@@ -79,8 +79,8 @@ func HandleCompletions(w http.ResponseWriter, r *http.Request) {
 		defer resp.Body.Close()
 	}
 	if err != nil {
-		http.Error(w, "unknown error"+err.Error(), http.StatusInternalServerError)
-		logrus.Error("unknown error" + err.Error())
+		http.Error(w, "unknown error "+err.Error(), http.StatusInternalServerError)
+		logrus.Error("unknown error " + err.Error())
 		return
 	}
 

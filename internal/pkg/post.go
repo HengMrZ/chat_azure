@@ -15,6 +15,7 @@ func Post(url string, request []byte, header map[string]string) (*http.Response,
 	for k, v := range header {
 		req.Header.Set(k, v)
 	}
+
 	res, err := http.DefaultClient.Do(req)
 	if err != nil {
 		return res, err
