@@ -72,7 +72,7 @@ systemctl start docker
 ### 构建
 
 ```shell
-docker build -t hermanz/chat_azure .
+docker build -t hermanz/chat_azure -f Dockerfile.legacy .
 ```
 
 ```shell
