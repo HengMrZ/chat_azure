@@ -84,6 +84,12 @@ func HandleCompletions(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	if resp.StatusCode > 399 {
+		logrus.Infoln(fetchAPI, config.GlobalCfg.ApiKey, resp.StatusCode)
+	} else {
+		logrus.Debugln(fetchAPI, config.GlobalCfg.ApiKey, resp.StatusCode)
+	}
+
 	reqTokens := calcuReqTokens(body)
 	if body["stream"] == false {
 		// TODO: 当stream模式为false，未统计tokens
