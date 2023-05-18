@@ -139,6 +139,7 @@ func checkUserToken(r *http.Request, w http.ResponseWriter) (string, bool) {
 }
 
 func stream(readable io.Reader, w http.ResponseWriter) {
+	w.Header().Set("Content-Type", "text/event-stream")
 	buf := make([]byte, 1024)
 	for {
 		n, err := readable.Read(buf)
