@@ -58,12 +58,9 @@ func HandleCompletions(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	deployName, ok := config.GlobalCfg.Mapper[modelName]
-	if !ok {
-		deployName = "firstGPT"
-	}
 	if deployName == "" {
 		http.Error(w, "Missing model mapper", http.StatusForbidden)
-		logrus.Error("Missing model mapper")
+		logrus.Errorf("Missing model mapper:%v", modelName)
 		return
 	}
 
