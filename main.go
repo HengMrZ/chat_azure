@@ -106,7 +106,7 @@ func main() {
 		port, _ = strconv.Atoi(v)
 	}
 	logrus.Infof("svc run on port [:%v]", port)
-	err = http.ListenAndServe(fmt.Sprintf(":%v", port), loggingMiddleware(mux))
+	err = http.ListenAndServe(fmt.Sprintf(":%v", port), corsMiddleware(loggingMiddleware(mux)))
 	if err != nil {
 		logrus.Fatal(err)
 	}
@@ -124,5 +124,16 @@ func loggingMiddleware(next http.Handler) http.Handler {
 
 		// 在处理请求之后记录
 		logrus.Infof("[%s] Request handled: %s %s", time.Now().Format(time.RFC1123), r.Method, r.URL.Path)
+	})
+}
+
+func corsMiddleware(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		origin := r.Header.Get("Origin")
+		if origin != "" {
+			w.Header().Set("Access-Control-Allow-Origin", origin)
+		}
+		// 处理请求
+		next.ServeHTTP(w, r)
 	})
 }
