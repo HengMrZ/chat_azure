@@ -26,7 +26,9 @@ func calcuReqTokens(body map[string]any) int {
 			return 0
 		}
 		v, ok := m["content"].(string)
-		input += v
+		if ok {
+			input += v
+		}
 	}
 	tokens := calculateTokens(input)
 	return tokens
