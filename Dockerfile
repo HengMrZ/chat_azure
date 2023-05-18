@@ -1,13 +1,15 @@
 # builder
 FROM --platform=$TARGETPLATFORM golang:1.18 as builder
+ARG TARGETARCH
 ARG GOPROXY="https://mirrors.tencent.com/go/,direct"
+
 WORKDIR /app
 
 ADD go.mod go.sum .
 RUN go mod download -x
 
 ADD . .
-RUN go build -x .
+RUN CGO_ENABLED=0 GOARCH=${TARGETARCH} go build -ldflags="-w -s" -x .
 
 # finally
 FROM --platform=$TARGETPLATFORM debian:stable-slim

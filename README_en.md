@@ -69,10 +69,28 @@ systemctl start docker
 
 After performing the above steps, you have installed and started Docker. Now, you can use Git for version control to store and manage code.
 
+### Build
+
+```shell
+docker build -t hermanz/chat_azure .
+```
+
+```shell
+docker buildx build --platform 'linux/arm64' hermanz/chat_azure:arm64 .
+docker buildx build --platform 'linux/amd64' hermanz/chat_azure:amd64 .
+```
+
+### Deploy DB Persistent Storage
+
+```shell
+docker volume create chat_azure.db
+```
+
 ### Deploy (with env)
 
 ```shell
 docker run -d --name chat_azure \
+    -v  chat_azure.db:/data:rw \
     -e "RESOURCENAME=[AZURE's resource name]" \
     -e "APIKEY=[AZURE's api key]" \
     -e "MAPPER_GPT35TUBER=[AZURE's OpenAI deploy]" \
@@ -84,6 +102,7 @@ docker run -d --name chat_azure \
 
 ```shell
 docker run -d --name chat_azure \
+    -v  chat_azure.db:/data:rw \
     -v config.yaml:/opt/config.yaml:ro \
     -p 8080:8080 \
     hermanz/chat_azure:latest

@@ -69,6 +69,17 @@ systemctl start docker
 
 执行以上步骤后，您已经安装并启动了 Docker。现在，您可以通过以下方式启动服务。
 
+### 构建
+
+```shell
+docker build -t hermanz/chat_azure .
+```
+
+```shell
+docker buildx build --platform 'linux/arm64' hermanz/chat_azure:arm64 .
+docker buildx build --platform 'linux/amd64' hermanz/chat_azure:amd64 .
+```
+
 ### 部署-数据库持久存储
 
 ```shell
