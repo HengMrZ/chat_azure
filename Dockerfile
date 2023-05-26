@@ -5,7 +5,7 @@ ARG GOPROXY="https://mirrors.tencent.com/go/,direct"
 
 WORKDIR /app
 
-ADD go.mod go.sum .
+ADD go.mod go.sum ./
 RUN go mod download -x
 
 ADD . .
