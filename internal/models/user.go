@@ -29,6 +29,9 @@ func InitDB(ctx context.Context) {
 	var err error
 	dbPath := "chat.db"
 	if v, exist := os.LookupEnv("DB_ROOT"); exist {
+		if _, err := os.Stat(v); os.IsNotExist(err) {
+			os.MkdirAll(v, os.ModeDir)
+		}
 		dbPath = filepath.Join(v, dbPath)
 	} else {
 		cwd, _ := os.Getwd()

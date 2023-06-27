@@ -1,5 +1,5 @@
 # builder
-FROM golang:1.18 as builder
+FROM golang:1.20 as builder
 ARG GOPROXY="https://mirrors.tencent.com/go/,direct"
 
 WORKDIR /app
@@ -11,7 +11,7 @@ ADD . .
 RUN CGO_ENABLED=0 go build -ldflags="-w -s" -x .
 
 # finally
-FROM debian:stable-slim
+FROM debian:bullseye-slim
 
 ARG MIRRORS=mirrors.aliyun.com
 

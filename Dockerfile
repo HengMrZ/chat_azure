@@ -1,5 +1,5 @@
 # builder
-FROM --platform=$TARGETPLATFORM golang:1.18 as builder
+FROM --platform=$TARGETPLATFORM golang:1.20 as builder
 ARG TARGETARCH
 ARG GOPROXY="https://mirrors.tencent.com/go/,direct"
 
@@ -12,7 +12,7 @@ ADD . .
 RUN CGO_ENABLED=0 GOARCH=${TARGETARCH} go build -ldflags="-w -s" -x .
 
 # finally
-FROM --platform=$TARGETPLATFORM debian:stable-slim
+FROM --platform=$TARGETPLATFORM debian:bullseye-slim
 
 ARG MIRRORS=mirrors.aliyun.com
 

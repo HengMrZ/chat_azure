@@ -6,7 +6,7 @@ import (
 	"github.com/HengMrZ/chat_azure/internal/models"
 	"github.com/sirupsen/logrus"
 	"github.com/ysmood/gop"
-	"gopkg.in/yaml.v2"
+	"sigs.k8s.io/yaml"
 )
 
 var GlobalCfg = new(AppConfig)
